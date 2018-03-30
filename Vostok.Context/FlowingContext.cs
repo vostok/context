@@ -16,7 +16,7 @@ namespace Vostok.Context
     /// Delegate for custom deserializer
     /// </summary>
     /// <typeparam name="T">Type to deserialize</typeparam>
-    /// <param name="writer">Binary reader from Vostok.Commons</param>
+    /// <param name="reader">Binary reader from Vostok.Commons</param>
     public delegate T Deserializer<out T>(IBinaryReader reader);
 
     /// <summary>
