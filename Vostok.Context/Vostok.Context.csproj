@@ -1,15 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Configurations>Debug;Release</Configurations>
+    <Version>1.0.0</Version>
+    <Authors>Vostok team</Authors>
+    <Company>SKB Kontur</Company>
+    <Product>Vostok</Product>
+    <Copyright>Copyright (c) 2017-2018 SKB Kontur</Copyright>
+    <PackageProjectUrl>https://github.com/vostok/context</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/vostok/context/blob/master/LICENSE</PackageLicenseUrl>
+    <Description>Context library for microservice toolkit http://vostok.tools/</Description>
     <LangVersion>7.2</LangVersion>
+    <NuspecFile>Vostok.Context.nuspec</NuspecFile>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>7.2</LangVersion>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
