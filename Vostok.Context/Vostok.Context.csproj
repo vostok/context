@@ -13,9 +13,6 @@
     <LangVersion>7.2</LangVersion>
     <NuspecFile>Vostok.Context.nuspec</NuspecFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="Vostok.Commons">
