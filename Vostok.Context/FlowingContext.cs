@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using JetBrains.Annotations;
 using Vostok.Commons.Binary;
 
 namespace Vostok.Context
@@ -37,9 +39,9 @@ namespace Vostok.Context
 
         private static readonly IDictionary<string, ISerializer> Serializers = new Dictionary<string, ISerializer>();
         private static readonly IDictionary<string, IDeserializer> Deserializers = new Dictionary<string, IDeserializer>();
-        private static IDictionary<string, ObjectInfo> dictContext = new Dictionary<string, ObjectInfo>();
-        private static IDictionary<string, ISerializer> defaultSerializers;
-        private static IDictionary<string, IDeserializer> defaultDeserializers;
+        private static readonly AsyncLocal<IDictionary<string, object>> Storage = new AsyncLocal<IDictionary<string, object>> {Value = new Dictionary<string, object>()};
+        private static IDictionary<Type, ISerializer> defaultSerializers;
+        private static IDictionary<Type, IDeserializer> defaultDeserializers;
         private static bool overwriteValues;
 
         /// <summary>
@@ -48,12 +50,12 @@ namespace Vostok.Context
         /// <typeparam name="T">Type of value</typeparam>
         /// <param name="key">Key</param>
         /// <param name="value">Value</param>
-        public static void Set<T>(string key, T value)
+        public static void Set<T>([NotNull] string key, T value)
         {
-            if (!dictContext.ContainsKey(key))
-                dictContext.Add(key, new ObjectInfo {Type = typeof(T).FullName, Object = value});
-            else if (overwriteValues)
-                dictContext[key] = new ObjectInfo {Type = typeof(T).FullName, Object = value};
+            if (overwriteValues)
+                Storage.Value[key] = value;
+            else if (!Storage.Value.ContainsKey(key))
+                Storage.Value.Add(key, value);
             else
                 throw new ArgumentException($"Key \"{key}\" already exists");
         }
@@ -62,11 +64,11 @@ namespace Vostok.Context
         /// Get value from context
         /// </summary>
         /// <typeparam name="T">Type of value</typeparam>
-        /// <param name="key">Key</param>
-        /// <returns>Value</returns>
-        public static T Get<T>(string key) => (T)Get(key);
+        public static T Get<T>([NotNull] string key) => (T)(Get(key) ?? default(T));
 
-        public static object Get(string key) => dictContext[key].Object;
+        public static object Get([NotNull] string key) => Storage.Value.TryGetValue(key, out var value) ? value : null;
+
+        public static void Remove([NotNull] string key) => Storage.Value.Remove(key);
 
         /// <summary>
         /// Serializer from context
@@ -76,35 +78,38 @@ namespace Vostok.Context
         {
             var writer = new BinaryBufferWriter(10);
             if (defaultSerializers == null)
-                defaultSerializers = new Dictionary<string, ISerializer>
+                defaultSerializers = new Dictionary<Type, ISerializer>
                 {
-                    {typeof(int).FullName, new SerializerInfo<int>((value, bw) => bw.Write(value))},
-                    {typeof(long).FullName, new SerializerInfo<long>((value, bw) => bw.Write(value))},
-                    {typeof(short).FullName, new SerializerInfo<short>((value, bw) => bw.Write(value))},
-                    {typeof(uint).FullName, new SerializerInfo<uint>((value, bw) => bw.Write(value))},
-                    {typeof(ulong).FullName, new SerializerInfo<ulong>((value, bw) => bw.Write(value))},
-                    {typeof(ushort).FullName, new SerializerInfo<ushort>((value, bw) => bw.Write(value))},
-                    {typeof(byte).FullName, new SerializerInfo<byte>((value, bw) => bw.Write(value))},
-                    {typeof(bool).FullName, new SerializerInfo<bool>((value, bw) => bw.Write(value))},
-                    {typeof(float).FullName, new SerializerInfo<float>((value, bw) => bw.Write(value))},
-                    {typeof(double).FullName, new SerializerInfo<double>((value, bw) => bw.Write(value))},
-                    {typeof(Guid).FullName, new SerializerInfo<Guid>((value, bw) => bw.Write(value))},
-                    {typeof(string).FullName, new SerializerInfo<string>((value, bw) => bw.Write(value))},
-                    {typeof(byte[]).FullName, new SerializerInfo<byte[]>((value, bw) => bw.Write(value))},
+                    {typeof(int), new SerializerInfo<int>((value, bw) => bw.Write(value))},
+                    {typeof(long), new SerializerInfo<long>((value, bw) => bw.Write(value))},
+                    {typeof(short), new SerializerInfo<short>((value, bw) => bw.Write(value))},
+                    {typeof(uint), new SerializerInfo<uint>((value, bw) => bw.Write(value))},
+                    {typeof(ulong), new SerializerInfo<ulong>((value, bw) => bw.Write(value))},
+                    {typeof(ushort), new SerializerInfo<ushort>((value, bw) => bw.Write(value))},
+                    {typeof(byte), new SerializerInfo<byte>((value, bw) => bw.Write(value))},
+                    {typeof(bool), new SerializerInfo<bool>((value, bw) => bw.Write(value))},
+                    {typeof(float), new SerializerInfo<float>((value, bw) => bw.Write(value))},
+                    {typeof(double), new SerializerInfo<double>((value, bw) => bw.Write(value))},
+                    {typeof(Guid), new SerializerInfo<Guid>((value, bw) => bw.Write(value))},
+                    {typeof(string), new SerializerInfo<string>((value, bw) => bw.Write(value))},
+                    {typeof(byte[]), new SerializerInfo<byte[]>((value, bw) => bw.Write(value))},
                 };
+            var storage = Storage.Value;
 
             writer.WriteDictionary(
-                dictContext,
+                storage,
                 (bw, key) => bw.Write(key),
-                (bw, info) =>
+                (bw, obj) =>
                 {
-                    bw.Write(info.Type.ToString());
-                    if (Serializers.ContainsKey(info.Type))
-                        Serializers[info.Type].Serialize(info.Object, bw);
-                    else if (defaultSerializers.ContainsKey(info.Type))
-                        defaultSerializers[info.Type].Serialize(info.Object, writer);
+                    var type = obj.GetType();
+                    var typeName = TypeName(type);
+                    bw.Write(type.FullName ?? type.Name);
+                    if (Serializers.ContainsKey(typeName))
+                        Serializers[typeName].Serialize(obj, bw);
+                    else if (defaultSerializers.ContainsKey(type))
+                        defaultSerializers[type].Serialize(obj, bw);
                     else
-                        throw new FormatException($"{nameof(FlowingContext)}: serializer for type \"{info.Type}\" does not exists");
+                        throw new FormatException($"{nameof(FlowingContext)}: serializer for type \"{type}\" does not exists");
                 });
 
             return Convert.ToBase64String(writer.FilledSegment.ToArray());
@@ -114,41 +119,43 @@ namespace Vostok.Context
         /// Deserializer to context
         /// </summary>
         /// <param name="context">Base64 string</param>
-        public static void Deserialize(string context)
+        public static void Deserialize([NotNull] string context)
         {
             if (defaultDeserializers == null)
-                defaultDeserializers = new Dictionary<string, IDeserializer>
+                defaultDeserializers = new Dictionary<Type, IDeserializer>
                 {
-                    {typeof(int).FullName, new DeserializerInfo<int>(br => br.ReadInt32())},
-                    {typeof(long).FullName, new DeserializerInfo<long>(br => br.ReadInt64())},
-                    {typeof(short).FullName, new DeserializerInfo<short>(br => br.ReadInt16())},
-                    {typeof(uint).FullName, new DeserializerInfo<uint>(br => br.ReadUInt32())},
-                    {typeof(ulong).FullName, new DeserializerInfo<ulong>(br => br.ReadUInt64())},
-                    {typeof(ushort).FullName, new DeserializerInfo<ushort>(br => br.ReadUInt16())},
-                    {typeof(byte).FullName, new DeserializerInfo<byte>(br => br.ReadByte())},
-                    {typeof(bool).FullName, new DeserializerInfo<bool>(br => br.ReadBool())},
-                    {typeof(float).FullName, new DeserializerInfo<float>(br => br.ReadFloat())},
-                    {typeof(double).FullName, new DeserializerInfo<double>(br => br.ReadDouble())},
-                    {typeof(Guid).FullName, new DeserializerInfo<Guid>(br => br.ReadGuid())},
-                    {typeof(string).FullName, new DeserializerInfo<string>(br => br.ReadString())},
-                    {typeof(byte[]).FullName, new DeserializerInfo<byte[]>(br => br.ReadByteArray())},
+                    {typeof(int), new DeserializerInfo<int>(br => br.ReadInt32())},
+                    {typeof(long), new DeserializerInfo<long>(br => br.ReadInt64())},
+                    {typeof(short), new DeserializerInfo<short>(br => br.ReadInt16())},
+                    {typeof(uint), new DeserializerInfo<uint>(br => br.ReadUInt32())},
+                    {typeof(ulong), new DeserializerInfo<ulong>(br => br.ReadUInt64())},
+                    {typeof(ushort), new DeserializerInfo<ushort>(br => br.ReadUInt16())},
+                    {typeof(byte), new DeserializerInfo<byte>(br => br.ReadByte())},
+                    {typeof(bool), new DeserializerInfo<bool>(br => br.ReadBool())},
+                    {typeof(float), new DeserializerInfo<float>(br => br.ReadFloat())},
+                    {typeof(double), new DeserializerInfo<double>(br => br.ReadDouble())},
+                    {typeof(Guid), new DeserializerInfo<Guid>(br => br.ReadGuid())},
+                    {typeof(string), new DeserializerInfo<string>(br => br.ReadString())},
+                    {typeof(byte[]), new DeserializerInfo<byte[]>(br => br.ReadByteArray())},
                 };
 
             var data = Convert.FromBase64String(context);
             var reader = new BinaryBufferReader(data);
 
-            dictContext = reader.ReadDictionary(
+            Storage.Value = reader.ReadDictionary(
                 br => br.ReadString(),
                 br =>
                 {
-                    var info = new ObjectInfo {Type = br.ReadString()};
-                    if (Deserializers.ContainsKey(info.Type))
-                        info.Object = Deserializers[info.Type].Deserialize(br);
-                    else if (defaultDeserializers.ContainsKey(info.Type))
-                        info.Object = defaultDeserializers[info.Type].Deserialize(br);
+                    var typeName = br.ReadString();
+                    var type = Type.GetType(typeName);
+                    object obj;
+                    if (Deserializers.ContainsKey(typeName))
+                        obj = Deserializers[typeName].Deserialize(br);
+                    else if (defaultDeserializers.ContainsKey(type))
+                        obj = defaultDeserializers[type].Deserialize(br);
                     else
-                        throw new FormatException($"{nameof(FlowingContext)}: deserializer for type \"{info.Type}\" does not exists");
-                    return info;
+                        throw new FormatException($"{nameof(FlowingContext)}: deserializer for type \"{type}\" does not exists");
+                    return obj;
                 });
         }
 
@@ -157,16 +164,16 @@ namespace Vostok.Context
         /// </summary>
         /// <typeparam name="T">Type to serialize</typeparam>
         /// <param name="serializer">Instance of Serializer delegate</param>
-        public static void SetSerializer<T>(Serializer<T> serializer) =>
-            Serializers.Add(typeof(T).FullName ?? typeof(T).Name, new SerializerInfo<T>(serializer));
+        public static void SetSerializer<T>([NotNull] Serializer<T> serializer) =>
+            Serializers.Add(TypeName<T>(), new SerializerInfo<T>(serializer));
 
         /// <summary>
         /// Set custom deserializer. Redefines default deserializer of the same type
         /// </summary>
         /// <typeparam name="T">Type to serialize</typeparam>
         /// <param name="deserializer">Instance of Deserializer delegate</param>
-        public static void SetDeserializer<T>(Deserializer<T> deserializer) =>
-            Deserializers.Add(typeof(T).FullName ?? typeof(T).Name, new DeserializerInfo<T>(deserializer));
+        public static void SetDeserializer<T>([NotNull] Deserializer<T> deserializer) =>
+            Deserializers.Add(TypeName<T>(), new DeserializerInfo<T>(deserializer));
 
         /// <summary>
         /// Sets behavior in case if key exists in context
@@ -174,11 +181,8 @@ namespace Vostok.Context
         /// <param name="overwrite">Overwrite key (true) or throw exception (false)</param>
         public static void SetOverwriteMode(bool overwrite) => overwriteValues = overwrite;
 
-        private class ObjectInfo
-        {
-            public object Object { get; set; }
-            public string Type { get; set; }
-        }
+        private static string TypeName<T>() => TypeName(typeof(T));
+        private static string TypeName(Type type) => type.FullName ?? type.Name;
 
         private class SerializerInfo<T> : ISerializer
         {
