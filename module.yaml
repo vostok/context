@@ -9,6 +9,7 @@ sdk *default:
     - Vostok.Context/bin/Release/netstandard2.0/Vostok.Context.dll
 
   deps:
+    - vostok.commons@dev
 
 full-build > sdk:
   build:
