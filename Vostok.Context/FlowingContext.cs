@@ -52,6 +52,9 @@ namespace Vostok.Context
         /// <param name="value">Value</param>
         public static void Set<T>([NotNull] string key, T value)
         {
+            if (Storage.Value == null)
+                Storage.Value = new Dictionary<string, object>();
+
             if (overwriteValues)
                 Storage.Value[key] = value;
             else if (!Storage.Value.ContainsKey(key))
@@ -66,9 +69,14 @@ namespace Vostok.Context
         /// <typeparam name="T">Type of value</typeparam>
         public static T Get<T>([NotNull] string key) => (T)(Get(key) ?? default(T));
 
-        public static object Get([NotNull] string key) => Storage.Value.TryGetValue(key, out var value) ? value : null;
+        public static object Get([NotNull] string key)
+        {
+            if (Storage.Value == null)
+                Storage.Value = new Dictionary<string, object>();
+            return Storage.Value.TryGetValue(key, out var value) ? value : null;
+        }
 
-        public static void Remove([NotNull] string key) => Storage.Value.Remove(key);
+        public static void Remove([NotNull] string key) => Storage.Value?.Remove(key);
 
         /// <summary>
         /// Serializer from context
