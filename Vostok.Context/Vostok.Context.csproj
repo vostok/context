@@ -1,17 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
-    <Version>1.0.0</Version>
+    <LangVersion>7.2</LangVersion>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <PackageVersion>$(Version)</PackageVersion>
+    <PackageReleaseNotes>TODO</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Vostok team</Authors>
     <Company>SKB Kontur</Company>
     <Product>Vostok</Product>
     <Copyright>Copyright (c) 2017-2018 SKB Kontur</Copyright>
+    <Title>Vostok context library</Title>
+    <Description>Context library for microservice toolkit http://vostok.tools/</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/context</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/context/blob/master/LICENSE</PackageLicenseUrl>
-    <Description>Context library for microservice toolkit http://vostok.tools/</Description>
-    <LangVersion>7.2</LangVersion>
-    <NuspecFile>Vostok.Context.nuspec</NuspecFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>vostok vostok.context</PackageTags>
+    <RepositoryUrl>https://github.com/vostok/context</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
