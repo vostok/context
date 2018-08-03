@@ -14,12 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Vostok.Commons">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\vostok.commons\Vostok.Commons\bin\Release\netstandard2.0\Vostok.Commons.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Vostok.Context\Vostok.Context.csproj" />
   </ItemGroup>
 
