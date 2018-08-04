@@ -6,7 +6,6 @@ namespace Vostok.Context
     /// <para>Represents mutable type-based ambient context properties.</para>
     /// <para>These properties are global in a sense that they can only hold one value of each type.</para>
     /// <para>See <see cref="Get{T}"/> and <see cref="Set{T}"/> for more details.</para>
-    /// <para></para>
     /// </summary>
     [PublicAPI]
     public interface IContextGlobals

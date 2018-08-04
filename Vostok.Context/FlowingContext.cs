@@ -3,8 +3,6 @@ using JetBrains.Annotations;
 
 namespace Vostok.Context
 {
-    // TODO(iloktionov): Serialization/deserialization for distributed properties.
-
     /// <summary>
     /// <para>Allows to store and retrieve arbitrary objects from ambient context.</para>
     /// <para>Ambient context propagates by itself into synchronous and asynchronous call chains by the means of <see cref="ExecutionContext"/>.</para>
@@ -31,5 +29,22 @@ namespace Vostok.Context
 
         [NotNull]
         public static IContextConfiguration Configuration { get; }
+
+        [CanBeNull]
+        public static string SerializeDistributedGlobals
+            => FlowingContextSerializer.SerializeGlobals(Globals, InternalConfiguration);
+
+        [CanBeNull]
+        public static string SerializeDistributedProperties
+            => FlowingContextSerializer.SerializeProperties(Properties, InternalConfiguration);
+
+        public static void RestoreDistributedGlobals([NotNull] string serialized)
+            => FlowingContextSerializer.RestoreGlobals(serialized, Globals, InternalConfiguration);
+
+        public static void RestoreDistributedProperties([NotNull] string serialized)
+            => FlowingContextSerializer.RestoreProperties(serialized, Properties, InternalConfiguration);
+
+        private static ContextConfiguration InternalConfiguration 
+            => (ContextConfiguration) Configuration;
     }
 }
