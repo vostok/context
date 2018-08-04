@@ -25,13 +25,13 @@ namespace Vostok.Context
             set => container.Value = value;
         }
 
-        public bool Set(string key, object value, bool allowOverwrite = true)
+        public bool Set(string name, object value, bool allowOverwrite = true)
         {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             var propertiesBefore = Properties;
-            var propertiesAfter = propertiesBefore.Set(key, value, allowOverwrite);
+            var propertiesAfter = propertiesBefore.Set(name, value, allowOverwrite);
 
             if (ReferenceEquals(propertiesBefore, propertiesAfter))
                 return false;
@@ -41,13 +41,13 @@ namespace Vostok.Context
             return true;
         }
 
-        public void Remove(string key)
+        public void Remove(string name)
         {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key));
+            if (name == null)
+                throw new ArgumentNullException(nameof(name));
 
             var propertiesBefore = Properties;
-            var propertiesAfter = propertiesBefore.Remove(key);
+            var propertiesAfter = propertiesBefore.Remove(name);
 
             if (ReferenceEquals(propertiesBefore, propertiesAfter))
                 return;

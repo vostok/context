@@ -3,8 +3,11 @@ using JetBrains.Annotations;
 
 namespace Vostok.Context
 {
+    // TODO(iloktionov): 1. Serialization/deserialization for distributed properties.
+    // TODO(iloktionov): 2. Global typed properties as an alternative to named properties.
+
     /// <summary>
-    /// <para>Allows to store and retrieve arbitrary properties from ambient context.</para>
+    /// <para>Allows to store and retrieve arbitrary objects from ambient context.</para>
     /// <para>Ambient context propagates by itself into synchronous and asynchronous call chains by the means of <see cref="ExecutionContext"/>.</para>
     /// <para></para>
     /// <para>See <see cref="Properties"/> and <see cref="IContextProperties"/> for more info on properties.</para>
