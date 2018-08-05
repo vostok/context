@@ -86,11 +86,27 @@ namespace Vostok.Context.Tests
         }
 
         [Test]
-        public void Get_and_set_with_runtime_type_parameters_should_work_correctly()
+        public void Get_and_set_with_runtime_type_parameters_should_work_correctly_with_each_other()
         {
             globals.Set(typeof(Type2), new Type2("custom-value"));
 
             globals.Get(typeof(Type2)).Should().BeOfType<Type2>().Which.Value.Should().Be("custom-value");
+        }
+
+        [Test]
+        public void Get_with_runtime_type_parameters_should_work_correctly_with_ordinary_set()
+        {
+            globals.Set(new Type2("7C0D64CF-9CBD-4B28-A45B-236760770271"));
+
+            globals.Get(typeof(Type2)).Should().BeOfType<Type2>().Which.Value.Should().Be("7C0D64CF-9CBD-4B28-A45B-236760770271");
+        }
+
+        [Test]
+        public void Set_with_runtime_type_parameters_should_work_correctly_with_ordinary_get()
+        {
+            globals.Set(typeof(Type2), new Type2("1E466DED-FAF7-46BD-97B7-5372A040D16F"));
+
+            globals.Get<Type2>()?.Value.Should().Be("1E466DED-FAF7-46BD-97B7-5372A040D16F");
         }
 
         private async Task SpoilContextAsync()
