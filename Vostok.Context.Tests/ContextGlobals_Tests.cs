@@ -85,6 +85,14 @@ namespace Vostok.Context.Tests
             globals.Get<Type2>()?.Value.Should().Be("value1");
         }
 
+        [Test]
+        public void Get_and_set_with_runtime_type_parameters_should_work_correctly()
+        {
+            globals.Set(typeof(Type2), new Type2("custom-value"));
+
+            globals.Get(typeof(Type2)).Should().BeOfType<Type2>().Which.Value.Should().Be("custom-value");
+        }
+
         private async Task SpoilContextAsync()
         {
             globals.Set(new Type2("value2"));
