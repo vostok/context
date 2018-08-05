@@ -26,5 +26,15 @@ namespace Vostok.Context
         /// <para>See <see cref="ContextSerializers"/> for built-in serializers of primitive and simple types.</para>
         /// </summary>
         void RegisterDistributedGlobal<T>([NotNull] string name, [NotNull] IContextSerializer<T> serializer);
+
+        /// <summary>
+        /// Removes all registered distributed properties from the whitelist.
+        /// </summary>
+        void ClearDistributedProperties();
+
+        /// <summary>
+        /// Removes all registered distributed globals from the whitelist.
+        /// </summary>
+        void ClearDistributedGlobals();
     }
 }

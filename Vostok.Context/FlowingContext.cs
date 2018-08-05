@@ -14,14 +14,9 @@ namespace Vostok.Context
     [PublicAPI]
     public static class FlowingContext
     {
-        static FlowingContext()
-        {
-            Reset();
-        }
-
-        private static ContextGlobals globals;
-        private static ContextProperties properties;
-        private static ContextConfiguration configuration;
+        private static ContextGlobals globals = new ContextGlobals();
+        private static ContextProperties properties = new ContextProperties();
+        private static ContextConfiguration configuration = new ContextConfiguration();
 
         [NotNull]
         public static IContextGlobals Globals => globals;
@@ -39,7 +34,7 @@ namespace Vostok.Context
         /// <para>May return null if there were no non-null global values to serialize.</para>
         /// </summary>
         [CanBeNull]
-        public static string SerializeDistributedGlobals
+        public static string SerializeDistributedGlobals()
             => FlowingContextSerializer.SerializeGlobals(globals, configuration);
 
         /// <summary>
@@ -49,7 +44,7 @@ namespace Vostok.Context
         /// <para>May return null if there were no non-null property values to serialize.</para>
         /// </summary>
         [CanBeNull]
-        public static string SerializeDistributedProperties
+        public static string SerializeDistributedProperties()
             => FlowingContextSerializer.SerializeProperties(properties, configuration);
 
         /// <summary>
@@ -65,12 +60,5 @@ namespace Vostok.Context
         /// </summary>
         public static void RestoreDistributedProperties([NotNull] string serialized)
             => FlowingContextRestorer.RestoreProperties(serialized, properties, configuration);
-
-        internal static void Reset()
-        {
-            globals = new ContextGlobals();
-            properties = new ContextProperties();
-            configuration = new ContextConfiguration();
-        }
     }
 }

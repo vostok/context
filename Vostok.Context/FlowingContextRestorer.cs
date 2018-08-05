@@ -8,7 +8,7 @@ namespace Vostok.Context
     internal static class FlowingContextRestorer
     {
         public static void RestoreGlobals(
-            [NotNull] string input,
+            [CanBeNull] string input,
             [NotNull] ContextGlobals globals,
             [NotNull] ContextConfiguration configuration)
         {
@@ -26,7 +26,7 @@ namespace Vostok.Context
         }
 
         public static void RestoreProperties(
-            [NotNull] string input,
+            [CanBeNull] string input,
             [NotNull] ContextProperties properties,
             [NotNull] ContextConfiguration configuration)
         {
@@ -46,6 +46,9 @@ namespace Vostok.Context
         [NotNull]
         private static IEnumerable<(string, string)> ReadProperties(string input, IContextErrorListener errorListener)
         {
+            if (input == null)
+                return Array.Empty<(string, string)>();
+
             try
             {
                 var properties = new List<(string, string)>();
