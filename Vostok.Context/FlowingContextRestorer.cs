@@ -3,18 +3,18 @@ using JetBrains.Annotations;
 
 namespace Vostok.Context
 {
-    internal static class FlowingContextSerializer
+    internal static class FlowingContextRestorer
     {
-        [CanBeNull]
-        public static string SerializeGlobals(
+        public static void RestoreGlobals(
+            [NotNull] string input,
             [NotNull] IContextGlobals globals,
             [NotNull] ContextConfiguration configuration)
         {
             throw new NotImplementedException();
         }
 
-        [CanBeNull]
-        public static string SerializeProperties(
+        public static void RestoreProperties(
+            [NotNull] string input,
             [NotNull] IContextProperties properties,
             [NotNull] ContextConfiguration configuration)
         {

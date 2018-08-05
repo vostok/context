@@ -39,10 +39,10 @@ namespace Vostok.Context
             => FlowingContextSerializer.SerializeProperties(Properties, InternalConfiguration);
 
         public static void RestoreDistributedGlobals([NotNull] string serialized)
-            => FlowingContextSerializer.RestoreGlobals(serialized, Globals, InternalConfiguration);
+            => FlowingContextRestorer.RestoreGlobals(serialized, Globals, InternalConfiguration);
 
         public static void RestoreDistributedProperties([NotNull] string serialized)
-            => FlowingContextSerializer.RestoreProperties(serialized, Properties, InternalConfiguration);
+            => FlowingContextRestorer.RestoreProperties(serialized, Properties, InternalConfiguration);
 
         private static ContextConfiguration InternalConfiguration 
             => (ContextConfiguration) Configuration;
