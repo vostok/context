@@ -14,6 +14,8 @@ namespace Vostok.Context.Helpers
             buffer = new byte[initialCapacity];
         }
 
+        public bool IsEmpty => length == 0;
+
         public void Clear()
         {
             offset = 0;
