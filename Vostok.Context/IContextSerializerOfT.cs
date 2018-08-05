@@ -9,9 +9,9 @@ namespace Vostok.Context
     public interface IContextSerializer<T>
     {
         /// <summary>
-        /// Serializes given <paramref name="value"/> to its string representation.
+        /// Serializes given non-null <paramref name="value"/> to its string representation.
         /// </summary>
-        string Serialize(T value);
+        string Serialize([NotNull] T value);
 
         /// <summary>
         /// Deserializes a value from given non-null string <paramref name="input"/>.
