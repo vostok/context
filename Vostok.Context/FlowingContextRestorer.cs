@@ -7,7 +7,7 @@ namespace Vostok.Context
     {
         public static void RestoreGlobals(
             [NotNull] string input,
-            [NotNull] IContextGlobals globals,
+            [NotNull] ContextGlobals globals,
             [NotNull] ContextConfiguration configuration)
         {
             throw new NotImplementedException();
@@ -15,7 +15,7 @@ namespace Vostok.Context
 
         public static void RestoreProperties(
             [NotNull] string input,
-            [NotNull] IContextProperties properties,
+            [NotNull] ContextProperties properties,
             [NotNull] ContextConfiguration configuration)
         {
             throw new NotImplementedException();

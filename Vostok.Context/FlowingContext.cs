@@ -14,37 +14,31 @@ namespace Vostok.Context
     [PublicAPI]
     public static class FlowingContext
     {
-        static FlowingContext()
-        {
-            Globals = new ContextGlobals();
-            Properties = new ContextProperties();
-            Configuration = new ContextConfiguration();
-        }
+        private static readonly ContextGlobals globals = new ContextGlobals();
+        private static readonly ContextProperties properties = new ContextProperties();
+        private static readonly ContextConfiguration configuration = new ContextConfiguration();
 
         [NotNull]
-        public static IContextGlobals Globals { get; }
+        public static IContextGlobals Globals => globals;
 
         [NotNull]
-        public static IContextProperties Properties { get; }
+        public static IContextProperties Properties => properties;
 
         [NotNull]
-        public static IContextConfiguration Configuration { get; }
+        public static IContextConfiguration Configuration => configuration;
 
         [CanBeNull]
         public static string SerializeDistributedGlobals
-            => FlowingContextSerializer.SerializeGlobals(Globals, InternalConfiguration);
+            => FlowingContextSerializer.SerializeGlobals(globals, configuration);
 
         [CanBeNull]
         public static string SerializeDistributedProperties
-            => FlowingContextSerializer.SerializeProperties(Properties, InternalConfiguration);
+            => FlowingContextSerializer.SerializeProperties(properties, configuration);
 
         public static void RestoreDistributedGlobals([NotNull] string serialized)
-            => FlowingContextRestorer.RestoreGlobals(serialized, Globals, InternalConfiguration);
+            => FlowingContextRestorer.RestoreGlobals(serialized, globals, configuration);
 
         public static void RestoreDistributedProperties([NotNull] string serialized)
-            => FlowingContextRestorer.RestoreProperties(serialized, Properties, InternalConfiguration);
-
-        private static ContextConfiguration InternalConfiguration 
-            => (ContextConfiguration) Configuration;
+            => FlowingContextRestorer.RestoreProperties(serialized, properties, configuration);
     }
 }
