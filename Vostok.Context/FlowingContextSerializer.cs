@@ -7,7 +7,7 @@ namespace Vostok.Context
     {
         [CanBeNull]
         public static string SerializeGlobals(
-            [NotNull] IContextGlobals globals,
+            [NotNull] ContextGlobals globals,
             [NotNull] ContextConfiguration configuration)
         {
             throw new NotImplementedException();
@@ -15,7 +15,7 @@ namespace Vostok.Context
 
         [CanBeNull]
         public static string SerializeProperties(
-            [NotNull] IContextProperties properties,
+            [NotNull] ContextProperties properties,
             [NotNull] ContextConfiguration configuration)
         {
             throw new NotImplementedException();
