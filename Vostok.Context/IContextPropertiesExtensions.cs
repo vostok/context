@@ -4,14 +4,12 @@ using JetBrains.Annotations;
 
 namespace Vostok.Context
 {
-    // TODO(iloktionov): Tests
-
     [PublicAPI]
     public static class IContextPropertiesExtensions
     {
-        public static TValue Get<TValue>([NotNull] this IContextProperties properties, [NotNull] string key, TValue defaultValue = default)
+        public static TValue Get<TValue>([NotNull] this IContextProperties properties, [NotNull] string name, TValue defaultValue = default)
         {
-            if (!properties.Current.TryGetValue(key, out var value))
+            if (!properties.Current.TryGetValue(name, out var value))
                 return defaultValue;
 
             if (value is TValue typedValue)
@@ -20,13 +18,13 @@ namespace Vostok.Context
             return defaultValue;
         }
 
-        public static IDisposable Use([NotNull] this IContextProperties properties, [NotNull] string key, object value)
+        public static IDisposable Use([NotNull] this IContextProperties properties, [NotNull] string name, object value)
         {
-            var oldValueExisted = properties.Current.TryGetValue(key, out var oldValue);
+            var oldValueExisted = properties.Current.TryGetValue(name, out var oldValue);
 
-            properties.Set(key, value);
+            properties.Set(name, value);
 
-            return new ContextPropertyScope(properties, key, oldValue, oldValueExisted);
+            return new ContextPropertyScope(properties, name, oldValue, oldValueExisted);
         }
 
         public static IDisposable Use([NotNull] this IContextProperties properties, [NotNull] IReadOnlyDictionary<string, object> values)
@@ -87,15 +85,15 @@ namespace Vostok.Context
 
             public void Dispose()
             {
-                foreach (var (key, oldValue, oldValueExisted) in data)
+                foreach (var (name, oldValue, oldValueExisted) in data)
                 {
                     if (oldValueExisted)
                     {
-                        properties.Set(key, oldValue);
+                        properties.Set(name, oldValue);
                     }
                     else
                     {
-                        properties.Remove(key);
+                        properties.Remove(name);
                     }
                 }
             }
