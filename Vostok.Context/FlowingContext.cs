@@ -31,6 +31,7 @@ namespace Vostok.Context
         /// <para>Serializes all context globals registered with <see cref="IContextConfiguration.RegisterDistributedGlobal{T}"/> in configuration and having non-null-values.</para>
         /// <para>Returned string is encoded in Base64 and can be transmitted in HTTP headers as-is.</para>
         /// <para>Returned string is meant to be used to <see cref="RestoreDistributedGlobals"/> on a different process/machine later.</para>
+        /// <para>May return null if there were no non-null global values to serialize.</para>
         /// </summary>
         [CanBeNull]
         public static string SerializeDistributedGlobals
@@ -40,6 +41,7 @@ namespace Vostok.Context
         /// <para>Serializes all context properties registered with <see cref="IContextConfiguration.RegisterDistributedProperty{T}"/> in configuration and having non-null-values.</para>
         /// <para>Returned string is encoded in Base64 and can be transmitted in HTTP headers as-is.</para>
         /// <para>Returned string is meant to be used to <see cref="RestoreDistributedProperties"/> on a different process/machine later.</para>
+        /// <para>May return null if there were no non-null property values to serialize.</para>
         /// </summary>
         [CanBeNull]
         public static string SerializeDistributedProperties
