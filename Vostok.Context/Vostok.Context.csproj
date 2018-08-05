@@ -37,6 +37,7 @@
     <PackageProjectUrl>https://github.com/vostok/context</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/context/blob/master/LICENSE</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageIconUrl>https://raw.githubusercontent.com/vostok/devtools/master/assets/Vostok-icon.png</PackageIconUrl>
     <PackageTags>vostok vostok.context</PackageTags>
     <RepositoryUrl>https://github.com/vostok/context</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
