@@ -18,7 +18,7 @@ namespace Vostok.Context
             [NotNull] ContextGlobals globals,
             [NotNull] ContextConfiguration configuration)
         {
-            return SerializeInternal(EnumerateGlobals(globals, configuration), configuration.ErrorListener);
+            return SerializeInternal(EnumerateGlobals(globals, configuration), configuration.ErrorCallback);
         }
 
         [CanBeNull]
@@ -26,7 +26,7 @@ namespace Vostok.Context
             [NotNull] ContextProperties properties,
             [NotNull] ContextConfiguration configuration)
         {
-            return SerializeInternal(EnumerateProperties(properties, configuration), configuration.ErrorListener);
+            return SerializeInternal(EnumerateProperties(properties, configuration), configuration.ErrorCallback);
         }
 
         private static IEnumerable<(string, object, IContextSerializer)> EnumerateGlobals(
@@ -64,7 +64,7 @@ namespace Vostok.Context
         [CanBeNull]
         private static string SerializeInternal(
             [NotNull] IEnumerable<(string, object, IContextSerializer)> properties,
-            [CanBeNull] IContextErrorListener errorListener)
+            [CanBeNull] Action<string, Exception> errorCallback)
         {
             using (StringWritersPool.Acquire(out var writer))
             {
@@ -72,7 +72,7 @@ namespace Vostok.Context
 
                 foreach (var (name, value, serializer) in properties)
                 {
-                    var serializedValue = SerializeValue(name, value, serializer, errorListener);
+                    var serializedValue = SerializeValue(name, value, serializer, errorCallback);
                     if (serializedValue == null)
                         continue;
 
@@ -89,7 +89,7 @@ namespace Vostok.Context
             [NotNull] string name,
             [NotNull] object value,
             [NotNull] IContextSerializer serializer,
-            [CanBeNull] IContextErrorListener errorListener)
+            [CanBeNull] Action<string, Exception> errorCallback)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Vostok.Context
             }
             catch (Exception error)
             {
-                errorListener?.OnError($"Failed to serialize property '{name}' of type '{value.GetType().Name}'.", error);
+                errorCallback?.Invoke($"Failed to serialize property '{name}' of type '{value.GetType().Name}'.", error);
 
                 return null;
             }
