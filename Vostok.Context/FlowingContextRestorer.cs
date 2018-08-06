@@ -12,12 +12,12 @@ namespace Vostok.Context
             [NotNull] ContextGlobals globals,
             [NotNull] ContextConfiguration configuration)
         {
-            foreach (var (name, serializedValue) in ReadProperties(input, configuration.ErrorListener))
+            foreach (var (name, serializedValue) in ReadProperties(input, configuration.ErrorCallback))
             {
                 if (!configuration.DistributedGlobals.TryGetValue(name, out var tuple))
                     continue;
 
-                var value = DeserializeValue(name, serializedValue, tuple.serializer, configuration.ErrorListener);
+                var value = DeserializeValue(name, serializedValue, tuple.serializer, configuration.ErrorCallback);
                 if (value == null)
                     continue;
 
@@ -30,12 +30,12 @@ namespace Vostok.Context
             [NotNull] ContextProperties properties,
             [NotNull] ContextConfiguration configuration)
         {
-            foreach (var (name, serializedValue) in ReadProperties(input, configuration.ErrorListener))
+            foreach (var (name, serializedValue) in ReadProperties(input, configuration.ErrorCallback))
             {
                 if (!configuration.DistributedProperties.TryGetValue(name, out var serializer))
                     continue;
 
-                var value = DeserializeValue(name, serializedValue, serializer, configuration.ErrorListener);
+                var value = DeserializeValue(name, serializedValue, serializer, configuration.ErrorCallback);
                 if (value == null)
                     continue;
 
@@ -44,7 +44,7 @@ namespace Vostok.Context
         }
 
         [NotNull]
-        private static IEnumerable<(string, string)> ReadProperties(string input, IContextErrorListener errorListener)
+        private static IEnumerable<(string, string)> ReadProperties(string input, Action<string, Exception> errorCallback)
         {
             if (input == null)
                 return Array.Empty<(string, string)>();
@@ -66,7 +66,7 @@ namespace Vostok.Context
             }
             catch (Exception error)
             {
-                errorListener?.OnError($"Failed to read property names and values from input string '{input}'.", error);
+                errorCallback?.Invoke($"Failed to read property names and values from input string '{input}'.", error);
 
                 return Array.Empty<(string, string)>();
             }
@@ -76,8 +76,8 @@ namespace Vostok.Context
         private static object DeserializeValue(
             string name,
             string input, 
-            IContextSerializer serializer, 
-            IContextErrorListener errorListener)
+            IContextSerializer serializer,
+            Action<string, Exception> errorCallback)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Vostok.Context
             }
             catch (Exception error)
             {
-                errorListener?.OnError($"Failed to deserialize value of property '{name}' from following string: '{input}'.", error);
+                errorCallback?.Invoke($"Failed to deserialize value of property '{name}' from following string: '{input}'.", error);
 
                 return null;
             }

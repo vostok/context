@@ -6,7 +6,7 @@ namespace Vostok.Context
 {
     internal class ContextConfiguration : IContextConfiguration
     {
-        public IContextErrorListener ErrorListener { get; set; }
+        public Action<string, Exception> ErrorCallback { get; set; }
 
         public ConcurrentDictionary<string, IContextSerializer> DistributedProperties { get; }
             = new ConcurrentDictionary<string, IContextSerializer>(StringComparer.Ordinal);

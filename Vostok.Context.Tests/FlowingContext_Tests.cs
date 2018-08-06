@@ -12,7 +12,7 @@ namespace Vostok.Context.Tests
     [TestFixture]
     internal class FlowingContext_Tests
     {
-        private IContextErrorListener errorListener;
+        private Action<string, Exception> errorCallback;
         private string name1;
         private string name2;
         private string name3;
@@ -22,9 +22,9 @@ namespace Vostok.Context.Tests
         [SetUp]
         public void TestSetup()
         {
-            errorListener = Substitute.For<IContextErrorListener>();
-            errorListener
-                .When(e => e.OnError(Arg.Any<string>(), Arg.Any<Exception>()))
+            errorCallback = Substitute.For<Action<string, Exception>>();
+            errorCallback
+                .When(e => e.Invoke(Arg.Any<string>(), Arg.Any<Exception>()))
                 .Do(
                     info =>
                     {
@@ -32,7 +32,7 @@ namespace Vostok.Context.Tests
                         Console.Out.WriteLine(info.Arg<Exception>());
                     });
 
-            FlowingContext.Configuration.ErrorListener = errorListener;
+            FlowingContext.Configuration.ErrorCallback = errorCallback;
             FlowingContext.Configuration.ClearDistributedGlobals();
             FlowingContext.Configuration.ClearDistributedProperties();
 
@@ -106,7 +106,7 @@ namespace Vostok.Context.Tests
         {
             FlowingContext.RestoreDistributedGlobals("whatever");
 
-            errorListener.Received(1).OnError(Arg.Any<string>(), Arg.Any<Exception>());
+            errorCallback.Received(1).Invoke(Arg.Any<string>(), Arg.Any<Exception>());
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace Vostok.Context.Tests
         {
             FlowingContext.RestoreDistributedProperties("whatever");
 
-            errorListener.Received(1).OnError(Arg.Any<string>(), Arg.Any<Exception>());
+            errorCallback.Received(1).Invoke(Arg.Any<string>(), Arg.Any<Exception>());
         }
 
         [Test]
@@ -201,7 +201,7 @@ namespace Vostok.Context.Tests
             FlowingContext.Globals.Get<Uri>().Should().BeNull();
             FlowingContext.Globals.Get<string>().Should().Be("whatever");
 
-            errorListener.Received(1).OnError(Arg.Any<string>(), Arg.Any<Exception>());
+            errorCallback.Received(1).Invoke(Arg.Any<string>(), Arg.Any<Exception>());
         }
 
         [Test]
@@ -224,7 +224,7 @@ namespace Vostok.Context.Tests
             FlowingContext.Properties.Get<string>(name1).Should().BeNull();
             FlowingContext.Properties.Get<string>(name2).Should().Be("value2");
 
-            errorListener.Received(1).OnError(Arg.Any<string>(), Arg.Any<Exception>());
+            errorCallback.Received(1).Invoke(Arg.Any<string>(), Arg.Any<Exception>());
         }
 
         [Test]
@@ -248,7 +248,7 @@ namespace Vostok.Context.Tests
             FlowingContext.Globals.Get<Uri>().Should().BeNull();
             FlowingContext.Globals.Get<string>().Should().Be("whatever");
 
-            errorListener.Received(1).OnError(Arg.Any<string>(), Arg.Any<Exception>());
+            errorCallback.Received(1).Invoke(Arg.Any<string>(), Arg.Any<Exception>());
         }
 
         [Test]
@@ -272,7 +272,7 @@ namespace Vostok.Context.Tests
             FlowingContext.Properties.Get<string>(name1).Should().BeNull();
             FlowingContext.Properties.Get<string>(name2).Should().Be("value2");
 
-            errorListener.Received(1).OnError(Arg.Any<string>(), Arg.Any<Exception>());
+            errorCallback.Received(1).Invoke(Arg.Any<string>(), Arg.Any<Exception>());
         }
 
         private class FailingSerializer<T> : IContextSerializer<T>

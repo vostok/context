@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace Vostok.Context
 {
@@ -6,10 +7,10 @@ namespace Vostok.Context
     public interface IContextConfiguration
     {
         /// <summary>
-        /// Gets/sets a listener that will be notified on each internal error in context management.
+        /// Gets/sets a callback that will be invoked on each internal error in context management.
         /// </summary>
         [CanBeNull]
-        IContextErrorListener ErrorListener { get; set; }
+        Action<string, Exception> ErrorCallback { get; set; }
 
         /// <summary>
         /// <para>Adds a named property of type <typeparamref name="T"/> to a whitelist of distributed properties.</para>
