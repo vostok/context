@@ -5,14 +5,10 @@ namespace Vostok.Context.Serializers
 {
     internal class DateTimeSerializer : IContextSerializer<DateTime>
     {
-        public string Serialize(DateTime value)
-        {
-            return value.ToString("O", CultureInfo.InvariantCulture);
-        }
+        public string Serialize(DateTime value) =>
+            value.ToString("O", CultureInfo.InvariantCulture);
 
-        public DateTime Deserialize(string input)
-        {
-            return DateTime.Parse(input, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
-        }
+        public DateTime Deserialize(string input) =>
+            DateTime.Parse(input, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
     }
 }

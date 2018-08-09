@@ -36,14 +36,8 @@ namespace Vostok.Context
             DistributedGlobals[name] = (typeof(T), new GenericSerializer<T>(serializer));
         }
 
-        public void ClearDistributedProperties()
-        {
-            DistributedProperties.Clear();
-        }
+        public void ClearDistributedProperties() => DistributedProperties.Clear();
 
-        public void ClearDistributedGlobals()
-        {
-            DistributedGlobals.Clear();
-        }
+        public void ClearDistributedGlobals() => DistributedGlobals.Clear();
     }
 }

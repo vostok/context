@@ -5,14 +5,10 @@ namespace Vostok.Context.Serializers
 {
     internal class DateTimeOffsetSerializer : IContextSerializer<DateTimeOffset>
     {
-        public string Serialize(DateTimeOffset value)
-        {
-            return value.ToString("O", CultureInfo.InvariantCulture);
-        }
+        public string Serialize(DateTimeOffset value) =>
+            value.ToString("O", CultureInfo.InvariantCulture);
 
-        public DateTimeOffset Deserialize(string input)
-        {
-            return DateTimeOffset.Parse(input, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
-        }
+        public DateTimeOffset Deserialize(string input) =>
+            DateTimeOffset.Parse(input, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind);
     }
 }

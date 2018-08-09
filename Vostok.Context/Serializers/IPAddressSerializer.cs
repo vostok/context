@@ -4,14 +4,10 @@ namespace Vostok.Context.Serializers
 {
     internal class IPAddressSerializer : IContextSerializer<IPAddress>
     {
-        public string Serialize(IPAddress value)
-        {
-            return value.ToString();
-        }
+        public string Serialize(IPAddress value) =>
+            value.ToString();
 
-        public IPAddress Deserialize(string input)
-        {
-            return IPAddress.Parse(input);
-        }
+        public IPAddress Deserialize(string input) =>
+            IPAddress.Parse(input);
     }
 }

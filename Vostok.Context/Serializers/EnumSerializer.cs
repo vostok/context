@@ -10,14 +10,10 @@ namespace Vostok.Context.Serializers
                 throw new ArgumentException($"Type {typeof(T).Name} is not an enum.");
         }
 
-        public string Serialize(T value)
-        {
-            return value.ToString();
-        }
+        public string Serialize(T value) =>
+            value.ToString();
 
-        public T Deserialize(string input)
-        {
-            return (T) Enum.Parse(typeof(T), input, true);
-        }
+        public T Deserialize(string input) =>
+            (T)Enum.Parse(typeof(T), input, true);
     }
 }

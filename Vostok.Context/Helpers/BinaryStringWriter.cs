@@ -34,7 +34,7 @@ namespace Vostok.Context.Helpers
             var byteCount = Encoding.UTF8.GetBytes(value, 0, value.Length, buffer, offset + sizeof(int));
 
             fixed (byte* ptr = &buffer[offset])
-                *(int*) ptr = byteCount;
+                *(int*)ptr = byteCount;
 
             offset += sizeof(int) + byteCount;
 
