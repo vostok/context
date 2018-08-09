@@ -75,7 +75,7 @@ namespace Vostok.Context
         [CanBeNull]
         private static object DeserializeValue(
             string name,
-            string input, 
+            string input,
             IContextSerializer serializer,
             Action<string, Exception> errorCallback)
         {

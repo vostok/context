@@ -2,14 +2,8 @@
 {
     internal class StringSerializer : IContextSerializer<string>
     {
-        public string Serialize(string value)
-        {
-            return value;
-        }
+        public string Serialize(string value) => value;
 
-        public string Deserialize(string input)
-        {
-            return input;
-        }
+        public string Deserialize(string input) => input;
     }
 }

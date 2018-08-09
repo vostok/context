@@ -20,7 +20,7 @@ namespace Vostok.Context.Helpers
             int size;
 
             fixed (byte* ptr = &buffer[position])
-                size = *(int*) ptr;
+                size = *(int*)ptr;
 
             var result = Encoding.UTF8.GetString(buffer, position + sizeof(int), size);
 

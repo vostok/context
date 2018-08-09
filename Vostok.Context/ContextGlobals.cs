@@ -11,28 +11,16 @@ namespace Vostok.Context
 {
     internal class ContextGlobals : IContextGlobals
     {
-        private readonly ConcurrentDictionary<Type, Func<object>> Getters = new ConcurrentDictionary<Type, Func<object>>();
-        private readonly ConcurrentDictionary<Type, Action<object>> Setters = new ConcurrentDictionary<Type, Action<object>>();
+        private readonly ConcurrentDictionary<Type, Func<object>> getters = new ConcurrentDictionary<Type, Func<object>>();
+        private readonly ConcurrentDictionary<Type, Action<object>> setters = new ConcurrentDictionary<Type, Action<object>>();
 
-        public T Get<T>()
-        {
-            return Container<T>.AsyncLocal.Value;
-        }
+        public T Get<T>() => Container<T>.AsyncLocal.Value;
 
-        public void Set<T>(T value)
-        {
-            Container<T>.AsyncLocal.Value = value;
-        }
+        public void Set<T>(T value) => Container<T>.AsyncLocal.Value = value;
 
-        public object Get(Type type)
-        {
-            return Getters.GetOrAdd(type, CompileGetter)();
-        }
+        public object Get(Type type) => getters.GetOrAdd(type, CompileGetter)();
 
-        public void Set(Type type, object value)
-        {
-            Setters.GetOrAdd(type, CompileSetter)(value);
-        }
+        public void Set(Type type, object value) => setters.GetOrAdd(type, CompileSetter)(value);
 
         private static Func<object> CompileGetter(Type type)
         {

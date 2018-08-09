@@ -9,14 +9,8 @@
             this.serializer = serializer;
         }
 
-        public string Serialize(object value)
-        {
-            return serializer.Serialize((T) value);
-        }
+        public string Serialize(object value) => serializer.Serialize((T)value);
 
-        public object Deserialize(string input)
-        {
-            return serializer.Deserialize(input);
-        }
+        public object Deserialize(string input) => serializer.Deserialize(input);
     }
 }
