@@ -54,5 +54,10 @@ namespace Vostok.Context
 
             Properties = propertiesAfter;
         }
+
+        public void Clear()
+        {
+            Properties = ImmutableArrayDictionary<string, object>.Empty;
+        }
     }
 }

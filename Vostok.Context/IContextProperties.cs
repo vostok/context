@@ -30,5 +30,10 @@ namespace Vostok.Context
         /// Removes the property with given <paramref name="name"/>. Has no effect if no such property exists.
         /// </summary>
         void Remove([NotNull] string name);
+
+        /// <summary>
+        /// Removes all properties.
+        /// </summary>
+        void Clear();
     }
 }
