@@ -8,7 +8,12 @@ namespace Vostok.Context
     {
         public static IDisposable Use<T>([NotNull] this IContextGlobals globals, T value)
         {
-            var oldValue = globals.Get<T>();
+            return Use(globals, value, out _);
+        }
+
+        public static IDisposable Use<T>([NotNull] this IContextGlobals globals, T value, out T oldValue)
+        {
+            oldValue = globals.Get<T>();
 
             globals.Set(value);
 
