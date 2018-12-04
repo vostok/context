@@ -18,6 +18,17 @@ namespace Vostok.Context
             return defaultValue;
         }
 
+        public static TValue Get<TValue>([NotNull] this IContextProperties properties, [NotNull] string name, Func<TValue> getDefaultValue)
+        {
+            if (!properties.Current.TryGetValue(name, out var value))
+                return getDefaultValue();
+
+            if (value is TValue typedValue)
+                return typedValue;
+
+            return getDefaultValue();
+        }
+
         public static IDisposable Use([NotNull] this IContextProperties properties, [NotNull] string name, object value)
         {
             var oldValueExisted = properties.Current.TryGetValue(name, out var oldValue);

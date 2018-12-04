@@ -38,6 +38,28 @@ namespace Vostok.Context.Tests
         }
 
         [Test]
+        public void Get_with_func_for_default_should_return_default_value_when_no_property_with_given_name_exists()
+        {
+            properties.Get("name", () => "default").Should().Be("default");
+        }
+
+        [Test]
+        public void Get_with_func_for_default_should_return_default_value_when_property_value_has_unexpected_type()
+        {
+            properties.Set("name", new object());
+
+            properties.Get("name", () => "default").Should().Be("default");
+        }
+
+        [Test]
+        public void Get_with_func_for_default_should_return_current_value_when_it_has_matching_type()
+        {
+            properties.Set("name", "value");
+
+            properties.Get("name", () => "default").Should().Be("value");
+        }
+
+        [Test]
         public void Use_should_be_able_to_temporarily_create_a_new_property()
         {
             using (properties.Use("name", "value"))
