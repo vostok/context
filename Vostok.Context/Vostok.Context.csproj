@@ -11,12 +11,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.1.1</VersionPrefix>
+    <VersionPrefix>0.1.2</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Title>Vostok context library</Title>
-    <Description>Context library for microservice toolkit http://vostok.tools/</Description>
+    <Title>Vostok.Context</Title>
+    <Description>A library that provides a fair deal of syntactic sugar over `AsyncLocal` to facilitate usage of ambient context properties in applications.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
