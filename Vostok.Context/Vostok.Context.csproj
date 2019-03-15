@@ -1,24 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <Import Project="..\..\vostok.devtools\library-common-props\Main-Project.props" />
   <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props" />
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <LangVersion>7.2</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
   <PropertyGroup>
-    <VersionPrefix>0.1.3</VersionPrefix>
+    <VersionPrefix>0.1.4</VersionPrefix>
   </PropertyGroup>
-
   <PropertyGroup>
     <Title>Vostok.Context</Title>
     <Description>A library that provides a fair deal of syntactic sugar over `AsyncLocal` to facilitate usage of ambient context properties in applications.</Description>
   </PropertyGroup>
-
   <PropertyGroup>
     <PackageProjectUrl>https://github.com/vostok/context</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/context/blob/master/LICENSE</PackageLicenseUrl>
@@ -26,10 +21,8 @@
     <PackageReleaseNotes>https://github.com/vostok/context/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/vostok/context</RepositoryUrl>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="..\..\vostok.commons.collections\Vostok.Commons.Collections\ImmutableArrayDictionary.cs" Link="Commons\ImmutableArrayDictionary.cs" />
     <Compile Include="..\..\vostok.commons.collections\Vostok.Commons.Collections\UnboundedObjectPool.cs" Link="Commons\UnboundedObjectPool.cs" />
   </ItemGroup>
-
 </Project>
