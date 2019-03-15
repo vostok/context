@@ -23,6 +23,7 @@
     <PackageProjectUrl>https://github.com/vostok/context</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/context/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>vostok vostok.context</PackageTags>
+    <PackageReleaseNotes>https://github.com/vostok/context/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/vostok/context</RepositoryUrl>
   </PropertyGroup>
 
