@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Vostok.Commons.Collections;
 using Vostok.Context.Helpers;
@@ -27,6 +28,12 @@ namespace Vostok.Context
             [NotNull] ContextConfiguration configuration)
         {
             return SerializeInternal(EnumerateProperties(properties, configuration), configuration.ErrorCallback);
+        }
+
+        [CanBeNull]
+        public static string WriteProperties([NotNull] IEnumerable<(string, string)> input, [CanBeNull] Action<string, Exception> errorCallback)
+        {
+            return SerializeInternal(input.Select(i => (i.Item1, (object)i.Item2, (IContextSerializer)RawStringSerializer.Instance)), errorCallback);
         }
 
         private static IEnumerable<(string, object, IContextSerializer)> EnumerateGlobals(

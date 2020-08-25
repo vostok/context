@@ -44,7 +44,7 @@ namespace Vostok.Context
         }
 
         [NotNull]
-        private static IEnumerable<(string, string)> ReadProperties(string input, Action<string, Exception> errorCallback)
+        public static IEnumerable<(string, string)> ReadProperties([CanBeNull] string input, [CanBeNull] Action<string, Exception> errorCallback)
         {
             if (input == null)
                 return Array.Empty<(string, string)>();

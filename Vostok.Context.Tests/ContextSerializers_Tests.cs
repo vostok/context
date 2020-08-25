@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -198,6 +199,22 @@ namespace Vostok.Context.Tests
         {
             TestSerialization(DayOfWeek.Friday, ContextSerializers.Enum<DayOfWeek>());
             TestSerialization(DayOfWeek.Monday, ContextSerializers.Enum<DayOfWeek>());
+        }
+
+        [Test]
+        public void Should_serialize_and_deserialize_string_dictionary()
+        {
+            var input = new[]
+            {
+                ("key1", "value1"),
+                ("KEY2", "VALUE2")
+            };
+
+            var serialized = FlowingContextSerializer.WriteProperties(input, null);
+
+            var deserialized = FlowingContextRestorer.ReadProperties(serialized, null);
+
+            deserialized.Should().BeEquivalentTo(input);
         }
 
         private static void TestSerialization<T>(T value, IContextSerializer<T> serializer)
