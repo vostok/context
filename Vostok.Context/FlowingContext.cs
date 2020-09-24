@@ -18,6 +18,15 @@ namespace Vostok.Context
         private static ContextProperties properties = new ContextProperties();
         private static ContextConfiguration configuration = new ContextConfiguration();
 
+        [NotNull]
+        public static IContextGlobals Globals => globals;
+
+        [NotNull]
+        public static IContextProperties Properties => properties;
+
+        [NotNull]
+        public static IContextConfiguration Configuration => configuration;
+
         /// <summary>
         /// <para>Serializes all context globals registered with <see cref="IContextConfiguration.RegisterDistributedGlobal{T}"/> in configuration and having non-null-values.</para>
         /// <para>Returned string is encoded in Base64 and can be transmitted in HTTP headers as-is.</para>
@@ -51,14 +60,5 @@ namespace Vostok.Context
         /// </summary>
         public static void RestoreDistributedProperties([NotNull] string serialized) =>
             FlowingContextRestorer.RestoreProperties(serialized, properties, configuration);
-
-        [NotNull]
-        public static IContextGlobals Globals => globals;
-
-        [NotNull]
-        public static IContextProperties Properties => properties;
-
-        [NotNull]
-        public static IContextConfiguration Configuration => configuration;
     }
 }

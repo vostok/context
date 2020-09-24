@@ -6,12 +6,12 @@ namespace Vostok.Context
     [PublicAPI]
     public static class IContextGlobalsExtensions
     {
-        public static IDisposable Use<T>([NotNull] this IContextGlobals globals, T value)
+        public static IDisposable Use<T>([NotNull] this IContextGlobals globals, [CanBeNull] T value)
         {
             return Use(globals, value, out _);
         }
 
-        public static IDisposable Use<T>([NotNull] this IContextGlobals globals, T value, out T oldValue)
+        public static IDisposable Use<T>([NotNull] this IContextGlobals globals, [CanBeNull] T value, [CanBeNull] out T oldValue)
         {
             oldValue = globals.Get<T>();
 

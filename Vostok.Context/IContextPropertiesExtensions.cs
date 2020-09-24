@@ -7,7 +7,7 @@ namespace Vostok.Context
     [PublicAPI]
     public static class IContextPropertiesExtensions
     {
-        public static TValue Get<TValue>([NotNull] this IContextProperties properties, [NotNull] string name, TValue defaultValue = default)
+        public static TValue Get<TValue>([NotNull] this IContextProperties properties, [NotNull] string name, [CanBeNull] TValue defaultValue = default)
         {
             if (!properties.Current.TryGetValue(name, out var value))
                 return defaultValue;
@@ -18,7 +18,7 @@ namespace Vostok.Context
             return defaultValue;
         }
 
-        public static TValue Get<TValue>([NotNull] this IContextProperties properties, [NotNull] string name, Func<TValue> getDefaultValue)
+        public static TValue Get<TValue>([NotNull] this IContextProperties properties, [NotNull] string name, [NotNull] Func<TValue> getDefaultValue)
         {
             if (!properties.Current.TryGetValue(name, out var value))
                 return getDefaultValue();
@@ -29,7 +29,7 @@ namespace Vostok.Context
             return getDefaultValue();
         }
 
-        public static IDisposable Use([NotNull] this IContextProperties properties, [NotNull] string name, object value)
+        public static IDisposable Use([NotNull] this IContextProperties properties, [NotNull] string name, [CanBeNull] object value)
         {
             var oldValueExisted = properties.Current.TryGetValue(name, out var oldValue);
 
