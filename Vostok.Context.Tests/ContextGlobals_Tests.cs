@@ -33,6 +33,15 @@ namespace Vostok.Context.Tests
         }
 
         [Test]
+        public void Get_can_return_null_value()
+        {
+            globals.Set(new Type2("value1"));
+            globals.Set<Type2>(null);
+
+            globals.Get<Type2>()?.Value.Should().BeNull();
+        }
+
+        [Test]
         public void Changes_made_after_running_a_new_task_should_not_affect_upstream_context()
         {
             globals.Set(new Type2("value1"));

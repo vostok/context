@@ -1,4 +1,8 @@
-## 0.1.3 (15-03-2019)
+## 0.1.4 (15-03-2019)
+
+Fix nullable attributes.
+
+## 0.1.3 (15-03-2019):
 
 Release notes are now just a link to changelog on GitHub.
 

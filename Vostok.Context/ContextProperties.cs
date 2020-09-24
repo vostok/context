@@ -19,12 +19,6 @@ namespace Vostok.Context
 
         public IReadOnlyDictionary<string, object> Current => Properties;
 
-        private ImmutableArrayDictionary<string, object> Properties
-        {
-            get => container.Value ?? EmptyProperties;
-            set => container.Value = value;
-        }
-
         public bool Set(string name, object value, bool allowOverwrite = true)
         {
             if (name == null)
@@ -58,6 +52,12 @@ namespace Vostok.Context
         public void Clear()
         {
             Properties = ImmutableArrayDictionary<string, object>.Empty;
+        }
+
+        private ImmutableArrayDictionary<string, object> Properties
+        {
+            get => container.Value ?? EmptyProperties;
+            set => container.Value = value;
         }
     }
 }
