@@ -1,0 +1,56 @@
+static readonly Vostok.Context.ContextSerializers.Bool -> Vostok.Context.IContextSerializer<bool>
+static readonly Vostok.Context.ContextSerializers.Byte -> Vostok.Context.IContextSerializer<byte>
+static readonly Vostok.Context.ContextSerializers.Char -> Vostok.Context.IContextSerializer<char>
+static readonly Vostok.Context.ContextSerializers.DateTime -> Vostok.Context.IContextSerializer<System.DateTime>
+static readonly Vostok.Context.ContextSerializers.DateTimeOffset -> Vostok.Context.IContextSerializer<System.DateTimeOffset>
+static readonly Vostok.Context.ContextSerializers.Decimal -> Vostok.Context.IContextSerializer<decimal>
+static readonly Vostok.Context.ContextSerializers.Double -> Vostok.Context.IContextSerializer<double>
+static readonly Vostok.Context.ContextSerializers.Float -> Vostok.Context.IContextSerializer<float>
+static readonly Vostok.Context.ContextSerializers.Guid -> Vostok.Context.IContextSerializer<System.Guid>
+static readonly Vostok.Context.ContextSerializers.Int -> Vostok.Context.IContextSerializer<int>
+static readonly Vostok.Context.ContextSerializers.IPAddress -> Vostok.Context.IContextSerializer<System.Net.IPAddress>
+static readonly Vostok.Context.ContextSerializers.Long -> Vostok.Context.IContextSerializer<long>
+static readonly Vostok.Context.ContextSerializers.Short -> Vostok.Context.IContextSerializer<short>
+static readonly Vostok.Context.ContextSerializers.SignedByte -> Vostok.Context.IContextSerializer<sbyte>
+static readonly Vostok.Context.ContextSerializers.String -> Vostok.Context.IContextSerializer<string>
+static readonly Vostok.Context.ContextSerializers.TimeSpan -> Vostok.Context.IContextSerializer<System.TimeSpan>
+static readonly Vostok.Context.ContextSerializers.UnsignedInt -> Vostok.Context.IContextSerializer<uint>
+static readonly Vostok.Context.ContextSerializers.UnsignedLong -> Vostok.Context.IContextSerializer<ulong>
+static readonly Vostok.Context.ContextSerializers.UnsignedShort -> Vostok.Context.IContextSerializer<ushort>
+static readonly Vostok.Context.ContextSerializers.Uri -> Vostok.Context.IContextSerializer<System.Uri>
+static Vostok.Context.ContextSerializers.Enum<T>() -> Vostok.Context.IContextSerializer<T>
+static Vostok.Context.FlowingContext.Configuration.get -> Vostok.Context.IContextConfiguration
+static Vostok.Context.FlowingContext.Globals.get -> Vostok.Context.IContextGlobals
+static Vostok.Context.FlowingContext.Properties.get -> Vostok.Context.IContextProperties
+static Vostok.Context.FlowingContext.RestoreDistributedGlobals(string serialized) -> void
+static Vostok.Context.FlowingContext.RestoreDistributedProperties(string serialized) -> void
+static Vostok.Context.FlowingContext.SerializeDistributedGlobals() -> string
+static Vostok.Context.FlowingContext.SerializeDistributedProperties() -> string
+static Vostok.Context.IContextGlobalsExtensions.Use<T>(this Vostok.Context.IContextGlobals globals, T value) -> System.IDisposable
+static Vostok.Context.IContextGlobalsExtensions.Use<T>(this Vostok.Context.IContextGlobals globals, T value, out T oldValue) -> System.IDisposable
+static Vostok.Context.IContextPropertiesExtensions.Get<TValue>(this Vostok.Context.IContextProperties properties, string name, System.Func<TValue> getDefaultValue) -> TValue
+static Vostok.Context.IContextPropertiesExtensions.Get<TValue>(this Vostok.Context.IContextProperties properties, string name, TValue defaultValue = default(TValue)) -> TValue
+static Vostok.Context.IContextPropertiesExtensions.Use(this Vostok.Context.IContextProperties properties, string name, object value) -> System.IDisposable
+static Vostok.Context.IContextPropertiesExtensions.Use(this Vostok.Context.IContextProperties properties, System.Collections.Generic.IReadOnlyDictionary<string, object> values) -> System.IDisposable
+Vostok.Context.ContextSerializers
+Vostok.Context.FlowingContext
+Vostok.Context.IContextConfiguration
+Vostok.Context.IContextConfiguration.ClearDistributedGlobals() -> void
+Vostok.Context.IContextConfiguration.ClearDistributedProperties() -> void
+Vostok.Context.IContextConfiguration.ErrorCallback.get -> System.Action<string, System.Exception>
+Vostok.Context.IContextConfiguration.ErrorCallback.set -> void
+Vostok.Context.IContextConfiguration.RegisterDistributedGlobal<T>(string name, Vostok.Context.IContextSerializer<T> serializer) -> void
+Vostok.Context.IContextConfiguration.RegisterDistributedProperty<T>(string name, Vostok.Context.IContextSerializer<T> serializer) -> void
+Vostok.Context.IContextGlobals
+Vostok.Context.IContextGlobals.Get<T>() -> T
+Vostok.Context.IContextGlobals.Set<T>(T value) -> void
+Vostok.Context.IContextGlobalsExtensions
+Vostok.Context.IContextProperties
+Vostok.Context.IContextProperties.Clear() -> void
+Vostok.Context.IContextProperties.Current.get -> System.Collections.Generic.IReadOnlyDictionary<string, object>
+Vostok.Context.IContextProperties.Remove(string name) -> void
+Vostok.Context.IContextProperties.Set(string name, object value, bool allowOverwrite = true) -> bool
+Vostok.Context.IContextPropertiesExtensions
+Vostok.Context.IContextSerializer<T>
+Vostok.Context.IContextSerializer<T>.Deserialize(string input) -> T
+Vostok.Context.IContextSerializer<T>.Serialize(T value) -> string
