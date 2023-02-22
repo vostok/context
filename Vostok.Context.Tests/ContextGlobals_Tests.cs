@@ -118,6 +118,22 @@ namespace Vostok.Context.Tests
             globals.Get<Type2>()?.Value.Should().Be("1E466DED-FAF7-46BD-97B7-5372A040D16F");
         }
 
+        [Test]
+        public void SetValueStorage_should_work()
+        {
+            globals.Set(42);
+            globals.Get<int>().Should().Be(42);
+            
+            int x = 43;
+            globals.SetValueStorage(() => x, xx => x = xx);
+
+            globals.Get<int>().Should().Be(43);
+            globals.Set(44);
+            
+            globals.Get<int>().Should().Be(44);
+            x.Should().Be(44);
+        }
+
         private async Task SpoilContextAsync()
         {
             globals.Set(new Type2("value2"));
