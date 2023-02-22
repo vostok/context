@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
+#pragma warning disable CS1998
 
 namespace Vostok.Context.Tests
 {
