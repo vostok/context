@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+#pragma warning disable CS1998
 
 // ReSharper disable AssignNullToNotNullAttribute
 
