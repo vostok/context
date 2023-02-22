@@ -6,6 +6,13 @@ namespace Vostok.Context
     [PublicAPI]
     public static class IContextGlobalsExtensions
     {
+        public static void SetValueStorage<T>([NotNull] this IContextGlobals globals, Func<T> getter, Action<T> setter)
+        {
+            if (globals is not ContextGlobals contextGlobals)
+                throw new ArgumentException($"{globals.GetType()} isn't {nameof(ContextGlobals)}");
+            contextGlobals.SetValueStorage(getter, setter);
+        }
+        
         public static IDisposable Use<T>([NotNull] this IContextGlobals globals, [CanBeNull] T value)
         {
             return Use(globals, value, out _);
