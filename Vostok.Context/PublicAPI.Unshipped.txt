@@ -1,1 +1,0 @@
-static Vostok.Context.IContextGlobalsExtensions.SetValueStorage<T>(this Vostok.Context.IContextGlobals globals, System.Func<T> getter, System.Action<T> setter) -> void

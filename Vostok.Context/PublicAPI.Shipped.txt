@@ -1,4 +1,4 @@
-static readonly Vostok.Context.ContextSerializers.Bool -> Vostok.Context.IContextSerializer<bool>
+﻿static readonly Vostok.Context.ContextSerializers.Bool -> Vostok.Context.IContextSerializer<bool>
 static readonly Vostok.Context.ContextSerializers.Byte -> Vostok.Context.IContextSerializer<byte>
 static readonly Vostok.Context.ContextSerializers.Char -> Vostok.Context.IContextSerializer<char>
 static readonly Vostok.Context.ContextSerializers.DateTime -> Vostok.Context.IContextSerializer<System.DateTime>
@@ -26,6 +26,7 @@ static Vostok.Context.FlowingContext.RestoreDistributedGlobals(string serialized
 static Vostok.Context.FlowingContext.RestoreDistributedProperties(string serialized) -> void
 static Vostok.Context.FlowingContext.SerializeDistributedGlobals() -> string
 static Vostok.Context.FlowingContext.SerializeDistributedProperties() -> string
+static Vostok.Context.IContextGlobalsExtensions.SetValueStorage<T>(this Vostok.Context.IContextGlobals globals, System.Func<T> getter, System.Action<T> setter) -> void
 static Vostok.Context.IContextGlobalsExtensions.Use<T>(this Vostok.Context.IContextGlobals globals, T value) -> System.IDisposable
 static Vostok.Context.IContextGlobalsExtensions.Use<T>(this Vostok.Context.IContextGlobals globals, T value, out T oldValue) -> System.IDisposable
 static Vostok.Context.IContextPropertiesExtensions.Get<TValue>(this Vostok.Context.IContextProperties properties, string name, System.Func<TValue> getDefaultValue) -> TValue

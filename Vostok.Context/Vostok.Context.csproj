@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\..\vostok.devtools\library-common-props\Main-Project.props"/>
-    <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props"/>
+    <Import Project="..\..\vostok.devtools\library-common-props\Main-Project.props" />
+    <Import Project="..\..\vostok.devtools\git-commit-to-assembly-title\Vostok.Tools.GitCommit2AssemblyTitle.props" />
     <PropertyGroup>
         <Configurations>Debug;Release</Configurations>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup>
-        <VersionPrefix>0.1.7</VersionPrefix>
+        <VersionPrefix>0.1.8</VersionPrefix>
     </PropertyGroup>
     <PropertyGroup>
         <Title>Vostok.Context</Title>
@@ -20,7 +20,7 @@
         <RepositoryUrl>https://github.com/vostok/context</RepositoryUrl>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="..\..\vostok.commons.collections\Vostok.Commons.Collections\ImmutableArrayDictionary.cs" Link="Commons\ImmutableArrayDictionary.cs"/>
-        <Compile Include="..\..\vostok.commons.collections\Vostok.Commons.Collections\UnboundedObjectPool.cs" Link="Commons\UnboundedObjectPool.cs"/>
+        <Compile Include="..\..\vostok.commons.collections\Vostok.Commons.Collections\ImmutableArrayDictionary.cs" Link="Commons\ImmutableArrayDictionary.cs" />
+        <Compile Include="..\..\vostok.commons.collections\Vostok.Commons.Collections\UnboundedObjectPool.cs" Link="Commons\UnboundedObjectPool.cs" />
     </ItemGroup>
 </Project>
