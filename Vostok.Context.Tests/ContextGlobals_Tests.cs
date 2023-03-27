@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using JetBrains.Annotations;
 using NUnit.Framework;
+
 #pragma warning disable CS1998
 
 namespace Vostok.Context.Tests
@@ -124,13 +125,13 @@ namespace Vostok.Context.Tests
         {
             globals.Set(42);
             globals.Get<int>().Should().Be(42);
-            
-            int x = 43;
+
+            var x = 43;
             globals.SetValueStorage(() => x, xx => x = xx);
 
             globals.Get<int>().Should().Be(43);
             globals.Set(44);
-            
+
             globals.Get<int>().Should().Be(44);
             x.Should().Be(44);
         }
@@ -155,7 +156,9 @@ namespace Vostok.Context.Tests
         }
 
         [UsedImplicitly]
-        private class Type1 { }
+        private class Type1
+        {
+        }
 
         private class Type2
         {

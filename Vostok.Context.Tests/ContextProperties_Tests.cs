@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+
 #pragma warning disable CS1998
 
 // ReSharper disable AssignNullToNotNullAttribute
@@ -113,7 +114,7 @@ namespace Vostok.Context.Tests
         [Test]
         public void Remove_should_not_tolerate_null_names()
         {
-            Action action = () => properties.Remove(null);
+            var action = () => properties.Remove(null);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -222,7 +223,7 @@ namespace Vostok.Context.Tests
             Task.Run(() => properties.Set("name", "value2")).Wait();
 
             properties.Current.Should()
-                .BeEquivalentTo(new Dictionary<string, object> { ["name"] = "value" });
+                .BeEquivalentTo(new Dictionary<string, object> {["name"] = "value"});
         }
 
         [Test]
@@ -236,7 +237,7 @@ namespace Vostok.Context.Tests
             thread.Join();
 
             properties.Current.Should()
-                .BeEquivalentTo(new Dictionary<string, object> { ["name"] = "value" });
+                .BeEquivalentTo(new Dictionary<string, object> {["name"] = "value"});
         }
 
         [Test]
@@ -247,7 +248,7 @@ namespace Vostok.Context.Tests
             SpoilContextAsync().Wait();
 
             properties.Current.Should()
-                .BeEquivalentTo(new Dictionary<string, object> { ["name"] = "value" });
+                .BeEquivalentTo(new Dictionary<string, object> {["name"] = "value"});
         }
 
         [Test]
@@ -258,7 +259,7 @@ namespace Vostok.Context.Tests
             YieldAndSpoilContextAsync().Wait();
 
             properties.Current.Should()
-                .BeEquivalentTo(new Dictionary<string, object> { ["name"] = "value" });
+                .BeEquivalentTo(new Dictionary<string, object> {["name"] = "value"});
         }
 
         [Test]
@@ -269,7 +270,7 @@ namespace Vostok.Context.Tests
             SleepAndSpoilContextAsync().Wait();
 
             properties.Current.Should()
-                .BeEquivalentTo(new Dictionary<string, object> { ["name"] = "value" });
+                .BeEquivalentTo(new Dictionary<string, object> {["name"] = "value"});
         }
 
         private async Task SpoilContextAsync()
