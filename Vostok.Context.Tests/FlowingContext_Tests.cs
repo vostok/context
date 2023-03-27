@@ -61,39 +61,39 @@ namespace Vostok.Context.Tests
             FlowingContext.SerializeDistributedGlobals().Should().BeNull();
         }
 
-         [Test]
-         public void SerializeDistributedGlobals_should_return_null_when_all_registered_distributed_globals_have_null_values()
-         {
-             FlowingContext.Configuration.RegisterDistributedGlobal(name1, ContextSerializers.Uri);
-        
-             FlowingContext.Globals.Set(null as Uri);
-        
-             FlowingContext.SerializeDistributedGlobals().Should().BeNull();
-         }
-        
-         [Test]
-         public void SerializeDistributedProperties_should_return_null_when_no_distributed_properties_are_registered()
-         {
-             FlowingContext.SerializeDistributedProperties().Should().BeNull();
-         }
-        
-         [Test]
-         public void SerializeDistributedProperties_should_return_null_when_all_registered_distributed_properties_have_no_values()
-         {
-             FlowingContext.Configuration.RegisterDistributedProperty(name1, ContextSerializers.Uri);
-        
-             FlowingContext.SerializeDistributedProperties().Should().BeNull();
-         }
-        
-         [Test]
-         public void SerializeDistributedProperties_should_return_null_when_all_registered_distributed_properties_have_null_values()
-         {
-             FlowingContext.Configuration.RegisterDistributedProperty(name1, ContextSerializers.Uri);
-        
-             FlowingContext.Properties.Set(name1, null);
-        
-             FlowingContext.SerializeDistributedProperties().Should().BeNull();
-         }
+        [Test]
+        public void SerializeDistributedGlobals_should_return_null_when_all_registered_distributed_globals_have_null_values()
+        {
+            FlowingContext.Configuration.RegisterDistributedGlobal(name1, ContextSerializers.Uri);
+
+            FlowingContext.Globals.Set(null as Uri);
+
+            FlowingContext.SerializeDistributedGlobals().Should().BeNull();
+        }
+
+        [Test]
+        public void SerializeDistributedProperties_should_return_null_when_no_distributed_properties_are_registered()
+        {
+            FlowingContext.SerializeDistributedProperties().Should().BeNull();
+        }
+
+        [Test]
+        public void SerializeDistributedProperties_should_return_null_when_all_registered_distributed_properties_have_no_values()
+        {
+            FlowingContext.Configuration.RegisterDistributedProperty(name1, ContextSerializers.Uri);
+
+            FlowingContext.SerializeDistributedProperties().Should().BeNull();
+        }
+
+        [Test]
+        public void SerializeDistributedProperties_should_return_null_when_all_registered_distributed_properties_have_null_values()
+        {
+            FlowingContext.Configuration.RegisterDistributedProperty(name1, ContextSerializers.Uri);
+
+            FlowingContext.Properties.Set(name1, null);
+
+            FlowingContext.SerializeDistributedProperties().Should().BeNull();
+        }
 
         [Test]
         public void RestoreDistributedGlobals_should_not_fail_on_null_input()
@@ -124,31 +124,31 @@ namespace Vostok.Context.Tests
         }
 
         [Test]
-         public void Should_correctly_serialize_and_restore_distributed_globals_according_to_whitelist()
-         {
-             FlowingContext.Configuration.RegisterDistributedGlobal(name1, ContextSerializers.Uri);
-             FlowingContext.Configuration.RegisterDistributedGlobal(name2, ContextSerializers.TimeSpan);
-             FlowingContext.Configuration.RegisterDistributedGlobal(name4, ContextSerializers.IPAddress);
-        
-             FlowingContext.Globals.Set(new Uri("https://kontur.ru"));
-             FlowingContext.Globals.Set(5.Hours());
-             FlowingContext.Globals.Set(123);
-        
-             var serialized = FlowingContext.SerializeDistributedGlobals();
+        public void Should_correctly_serialize_and_restore_distributed_globals_according_to_whitelist()
+        {
+            FlowingContext.Configuration.RegisterDistributedGlobal(name1, ContextSerializers.Uri);
+            FlowingContext.Configuration.RegisterDistributedGlobal(name2, ContextSerializers.TimeSpan);
+            FlowingContext.Configuration.RegisterDistributedGlobal(name4, ContextSerializers.IPAddress);
 
-             // (iloktionov): Now spoil all the globals:
-             FlowingContext.Globals.Set(null as Uri);
-             FlowingContext.Globals.Set(default(TimeSpan));
-             FlowingContext.Globals.Set(default(int));
-             FlowingContext.Globals.Set(IPAddress.Loopback);
-        
-             FlowingContext.RestoreDistributedGlobals(serialized);
-        
-             FlowingContext.Globals.Get<Uri>().Should().Be(new Uri("https://kontur.ru"));
-             FlowingContext.Globals.Get<TimeSpan>().Should().Be(5.Hours());
-             FlowingContext.Globals.Get<int>().Should().Be(0); // should not get restored due to whitelist
-             FlowingContext.Globals.Get<IPAddress>().Should().Be(IPAddress.Loopback); // should not get restored due to null value
-         }
+            FlowingContext.Globals.Set(new Uri("https://kontur.ru"));
+            FlowingContext.Globals.Set(5.Hours());
+            FlowingContext.Globals.Set(123);
+
+            var serialized = FlowingContext.SerializeDistributedGlobals();
+
+            // (iloktionov): Now spoil all the globals:
+            FlowingContext.Globals.Set(null as Uri);
+            FlowingContext.Globals.Set(default(TimeSpan));
+            FlowingContext.Globals.Set(default(int));
+            FlowingContext.Globals.Set(IPAddress.Loopback);
+
+            FlowingContext.RestoreDistributedGlobals(serialized);
+
+            FlowingContext.Globals.Get<Uri>().Should().Be(new Uri("https://kontur.ru"));
+            FlowingContext.Globals.Get<TimeSpan>().Should().Be(5.Hours());
+            FlowingContext.Globals.Get<int>().Should().Be(0); // should not get restored due to whitelist
+            FlowingContext.Globals.Get<IPAddress>().Should().Be(IPAddress.Loopback); // should not get restored due to null value
+        }
 
         [Test]
         public void Should_correctly_serialize_and_restore_distributed_properties_according_to_whitelist()

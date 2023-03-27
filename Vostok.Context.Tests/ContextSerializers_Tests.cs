@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -19,10 +18,10 @@ namespace Vostok.Context.Tests
                 typeof(IContextSerializer<>).Assembly.GetTypes()
                     .Where(
                         t => t.GetInterfaces()
-                                 .Where(i => i.IsGenericType)
-                                 .Where(i => !i.ContainsGenericParameters)
-                                 .Select(i => i.GetGenericTypeDefinition())
-                                 .FirstOrDefault() == typeof(IContextSerializer<>));
+                            .Where(i => i.IsGenericType)
+                            .Where(i => !i.ContainsGenericParameters)
+                            .Select(i => i.GetGenericTypeDefinition())
+                            .FirstOrDefault() == typeof(IContextSerializer<>));
 
             var serializerTypeNames = serializerTypes.Select(t => t.Name.Replace("Serializer", ""));
 

@@ -87,11 +87,11 @@ namespace Vostok.Context.Tests
         public void Use_should_be_able_to_temporarily_create_several_new_properties()
         {
             using (properties.Use(
-                new Dictionary<string, object>
-                {
-                    ["name1"] = "value1",
-                    ["name2"] = "value2"
-                }))
+                       new Dictionary<string, object>
+                       {
+                           ["name1"] = "value1",
+                           ["name2"] = "value2"
+                       }))
             {
                 properties.Get<string>("name1").Should().Be("value1");
                 properties.Get<string>("name2").Should().Be("value2");
@@ -108,11 +108,11 @@ namespace Vostok.Context.Tests
             properties.Set("name2", "value2");
 
             using (properties.Use(
-                new Dictionary<string, object>
-                {
-                    ["name1"] = "value3",
-                    ["name2"] = "value4"
-                }))
+                       new Dictionary<string, object>
+                       {
+                           ["name1"] = "value3",
+                           ["name2"] = "value4"
+                       }))
             {
                 properties.Get<string>("name1").Should().Be("value3");
                 properties.Get<string>("name2").Should().Be("value4");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
@@ -14,9 +15,11 @@ namespace Vostok.Context
         private readonly ConcurrentDictionary<Type, Func<object>> getters = new ConcurrentDictionary<Type, Func<object>>();
         private readonly ConcurrentDictionary<Type, Action<object>> setters = new ConcurrentDictionary<Type, Action<object>>();
 
-        public T Get<T>() => Container<T>.AsyncLocal.Value;
+        public void SetValueStorage<T>(Func<T> getter, Action<T> setter) => Container<T>.SetValueProvider(getter, setter);
 
-        public void Set<T>(T value) => Container<T>.AsyncLocal.Value = value;
+        public T Get<T>() => Container<T>.Value;
+
+        public void Set<T>(T value) => Container<T>.Value = value;
 
         public object Get(Type type) => getters.GetOrAdd(type, CompileGetter)();
 
@@ -25,11 +28,12 @@ namespace Vostok.Context
         private static Func<object> CompileGetter(Type type)
         {
             var containerType = typeof(Container<>).MakeGenericType(type);
-            var asyncLocalField = containerType.GetField(nameof(Container<int>.AsyncLocal), BindingFlags.Static | BindingFlags.Public);
 
-            var asyncLocalAccess = Expression.MakeMemberAccess(null, asyncLocalField);
-            var valueAccess = Expression.Property(asyncLocalAccess, nameof(AsyncLocal<int>.Value));
-            var objectCast = Expression.Convert(valueAccess, typeof(object));
+            var valueProperty = containerType.GetProperty(nameof(Container<int>.Value), BindingFlags.Static | BindingFlags.Public);
+            var valuePropertyGetter = valueProperty.GetGetMethod();
+
+            var propertyGetter = Expression.Call(valuePropertyGetter);
+            var objectCast = Expression.Convert(propertyGetter, typeof(object));
 
             return Expression.Lambda<Func<object>>(objectCast).Compile();
         }
@@ -37,24 +41,42 @@ namespace Vostok.Context
         private static Action<object> CompileSetter(Type type)
         {
             var containerType = typeof(Container<>).MakeGenericType(type);
-            var asyncLocalField = containerType.GetField(nameof(Container<int>.AsyncLocal), BindingFlags.Static | BindingFlags.Public);
-            var asyncLocalType = asyncLocalField.FieldType;
 
-            var valueProperty = asyncLocalType.GetProperty(nameof(AsyncLocal<int>.Value), BindingFlags.Instance | BindingFlags.Public);
+            var valueProperty = containerType.GetProperty(nameof(Container<int>.Value), BindingFlags.Static | BindingFlags.Public);
             var valuePropertySetter = valueProperty.GetSetMethod();
 
             var parameter = Expression.Parameter(typeof(object));
             var castedParameter = Expression.Convert(parameter, type);
-
-            var asyncLocalAccess = Expression.MakeMemberAccess(null, asyncLocalField);
-            var propertySetter = Expression.Call(asyncLocalAccess, valuePropertySetter, castedParameter);
+            var propertySetter = Expression.Call(valuePropertySetter, castedParameter);
 
             return Expression.Lambda<Action<object>>(propertySetter, parameter).Compile();
         }
 
         private static class Container<T>
         {
-            public static readonly AsyncLocal<T> AsyncLocal = new AsyncLocal<T>();
+            private static readonly AsyncLocal<T> AsyncLocal = new AsyncLocal<T>();
+            private static Func<T> getter;
+            private static Action<T> setter;
+
+            public static T Value
+            {
+                get =>
+                    getter == null ? AsyncLocal.Value : getter();
+                set
+                {
+                    if (setter == null)
+                        AsyncLocal.Value = value;
+                    else
+                        setter(value);
+                }
+            }
+
+            [SuppressMessage("ReSharper", "ParameterHidesMember")]
+            public static void SetValueProvider(Func<T> getter, Action<T> setter)
+            {
+                Container<T>.getter = getter;
+                Container<T>.setter = setter;
+            }
         }
     }
 }
