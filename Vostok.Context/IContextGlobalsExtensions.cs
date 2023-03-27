@@ -12,7 +12,7 @@ namespace Vostok.Context
                 throw new ArgumentException($"{globals.GetType()} isn't {nameof(ContextGlobals)}");
             contextGlobals.SetValueStorage(getter, setter);
         }
-        
+
         public static IDisposable Use<T>([NotNull] this IContextGlobals globals, [CanBeNull] T value)
         {
             return Use(globals, value, out _);

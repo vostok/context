@@ -34,7 +34,7 @@ namespace Vostok.Context
 
             var propertyGetter = Expression.Call(valuePropertyGetter);
             var objectCast = Expression.Convert(propertyGetter, typeof(object));
-            
+
             return Expression.Lambda<Func<object>>(objectCast).Compile();
         }
 
@@ -54,11 +54,10 @@ namespace Vostok.Context
 
         private static class Container<T>
         {
+            private static readonly AsyncLocal<T> AsyncLocal = new AsyncLocal<T>();
             private static Func<T> getter;
             private static Action<T> setter;
 
-            private static readonly AsyncLocal<T> AsyncLocal = new AsyncLocal<T>();
-            
             public static T Value
             {
                 get =>
