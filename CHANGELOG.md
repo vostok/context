@@ -1,3 +1,7 @@
+## 0.1.8 (12-12-2024): 
+
+Bump NuGet deps versions
+
 ## 0.1.7 (27-02-2023):
 
 Added a way to provide custom value storage instead of AsyncLocal.
