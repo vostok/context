@@ -7,12 +7,35 @@ notests *default:
 
   install:
     - Vostok.Context/bin/Release/netstandard2.0/Vostok.Context.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Context/bin/Release/netstandard2.0/Vostok.Context.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Context/bin/Release/net6.0/Vostok.Context.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Context/bin/Release/net8.0/Vostok.Context.dll
 
   deps:
     - vostok.commons.collections/src
     - vostok.devtools
 
 full-build > notests:
+  install:
+    - Vostok.Context/bin/Release/netstandard2.0/Vostok.Context.dll
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.Context/bin/Release/netstandard2.0/Vostok.Context.dll
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.Context/bin/Release/net6.0/Vostok.Context.dll
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.Context/bin/Release/net8.0/Vostok.Context.dll
+  
   deps:
     - -vostok.devtools
     - vostok.devtools@with-net6.0
